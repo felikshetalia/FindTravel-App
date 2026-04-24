@@ -1,5 +1,7 @@
 # FindTravel-App
 
+Project root: /FindTravel-App
+
 ## TODO:
 
 ### 1. Add the specifications here in pdf format
