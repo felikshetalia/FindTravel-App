@@ -22,7 +22,6 @@ model Location {
   addresses Address[]
   airports  Airport[]
   offers    Offer[]
-  tours     Tour[]
 
   @@unique([country, city])
 }
@@ -98,29 +97,4 @@ model Offer {
   returnFlight   Flight        @relation("ReturnFlight", fields: [returnFlightId], references: [id])
   location       Location      @relation(fields: [locationId], references: [id])
   accommodation  Accommodation @relation(fields: [accommodationId], references: [id])
-
-  tours OfferTour[]
-}
-
-model Tour {
-  id          String  @id @default(uuid()) @db.Uuid
-  name        String
-  description String?
-  price       Float
-  currency    String
-
-  locationId String   @db.Uuid
-  location   Location @relation(fields: [locationId], references: [id])
-
-  offers OfferTour[]
-}
-
-model OfferTour {
-  offerId String @db.Uuid
-  tourId  String @db.Uuid
-
-  offer Offer @relation(fields: [offerId], references: [id])
-  tour  Tour  @relation(fields: [tourId], references: [id])
-
-  @@id([offerId, tourId])
 }
