@@ -7,7 +7,6 @@ import { OffersModule } from './offers/offers.module';
 import { AccommodationsModule } from './admin/accommodations/accommodations.module';
 import { LocationsModule } from './admin/locations/locations.module';
 import { AddressesModule } from './admin/addresses/addresses.module';
-import { AdminAddressesController } from './admin/admin-addresses/admin-addresses.controller';
 
 @Module({
   imports: [
@@ -18,7 +17,7 @@ import { AdminAddressesController } from './admin/admin-addresses/admin-addresse
     LocationsModule,
     AddressesModule,
   ],
-  controllers: [AppController, AdminAddressesController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
