@@ -8,7 +8,13 @@ export class LocationsService {
   constructor(private readonly _prismaService: PrismaService) {}
 
   create(dto: CreateLocationDto) {
-    return this._prismaService.location.create({ data: dto });
+    return this._prismaService.location.create({
+      data: {
+        country: dto.country,
+        city: dto.city,
+        state: dto.state,
+      },
+    });
   }
 
   findAll() {
