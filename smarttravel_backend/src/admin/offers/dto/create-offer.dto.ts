@@ -1,11 +1,11 @@
-import { IsDecimal, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateOfferDto {
   @IsOptional()
   @IsString()
   description?: string;
 
-  @IsDecimal()
+  @IsNumber()
   fee!: number;
 
   @IsString()

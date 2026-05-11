@@ -16,3 +16,15 @@ Project root: /FindTravel-App
 npx prisma migrate dev --name <name>
 npx prisma generate
 </code>
+
+##### Phase 1:
+
+NestJS + simple rule filtering + OpenAI or mock LLM response
+
+##### Phase 2:
+
+Add bge-m3 embeddings for offer matching
+
+##### Phase 3:
+
+Add local Qwen/Llama model via Ollama for explanations

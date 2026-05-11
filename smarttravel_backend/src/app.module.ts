@@ -12,6 +12,7 @@ import { AdminAirportsController } from './admin/airports/airports.controller';
 import { AirportsModule } from './admin/airports/airports.module';
 import { FlightsService } from './admin/flights/flights.service';
 import { FlightsModule } from './admin/flights/flights.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FlightsModule } from './admin/flights/flights.module';
     AddressesModule,
     AirportsModule,
     FlightsModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],
