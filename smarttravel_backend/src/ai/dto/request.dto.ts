@@ -32,3 +32,23 @@ export class RequestDto {
   @IsString()
   promptLanguage?: string;
 }
+
+export class UserRequestDto {
+  @IsString()
+  prompt!: string;
+
+  @IsOptional()
+  @IsString()
+  promptLanguage?: string;
+}
+
+export type PreferencesJson = {
+  origin?: string | null;
+  destination?: string | null;
+  duration?: number | null;
+  budget?: number | null;
+  currency?: string | null;
+  interests?: string[];
+  season?: string | null;
+  promptLanguage?: string;
+};
