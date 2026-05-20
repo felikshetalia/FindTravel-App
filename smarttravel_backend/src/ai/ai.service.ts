@@ -27,7 +27,6 @@ export class AiService {
 
     const recommendations = await this._rankOffers(preferences, offers);
     return {
-      preferences: preferences,
       recommendations: recommendations,
     };
   }
@@ -38,10 +37,20 @@ export class AiService {
         ...(preferences.destination
           ? {
               location: {
-                city: {
-                  contains: preferences.destination,
-                  mode: 'insensitive',
-                },
+                OR: [
+                  {
+                    city: {
+                      contains: preferences.destination,
+                      mode: 'insensitive',
+                    },
+                  },
+                  {
+                    country: {
+                      contains: preferences.destination,
+                      mode: 'insensitive',
+                    },
+                  },
+                ],
               },
             }
           : {}),
