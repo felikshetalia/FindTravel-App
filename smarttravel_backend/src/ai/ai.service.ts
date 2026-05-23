@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PreferencesJson, RequestDto, UserRequestDto } from './dto/request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { semanticKeywords } from './semantic-tags';
 
 @Injectable()
 export class AiService {
@@ -15,6 +16,8 @@ export class AiService {
       dto.promptLanguage ?? 'English',
     );
 
+    const widerInterests = this._expandInterests(preferences.interests);
+    console.log(widerInterests);
     const offers = await this._loadOffers(preferences);
 
     if (offers.length === 0) {
@@ -157,6 +160,10 @@ Return only valid JSON.
 Do not use markdown.
 Recommend only from the provided offers.
 Do not invent offer IDs, destinations, hotels, prices, or flights.
+Do not infer duration from flight times.
+Use only the "nights" field as duration.
+The field "fee" is the total offer price. It already includes flights and accommodation.
+When explaining budget, refer only to "total offer price", not separate flight or accommodation costs.
 All explanation text must be in ${preferences.promptLanguage ?? 'English'}.
           `.trim(),
           },
@@ -197,5 +204,21 @@ Return exactly:
     } catch {
       throw new InternalServerErrorException('Invalid JSON returned by model');
     }
+  }
+
+  private _expandInterests(interests: string[] = []) {
+    const expanded = new Set<string>();
+    for (const interest of interests) {
+      const normalized = interest.toLowerCase();
+
+      expanded.add(normalized);
+
+      for (const [key, keywords] of Object.entries(semanticKeywords)) {
+        if (key === normalized || keywords.includes(normalized)) {
+          keywords.forEach((keyword) => expanded.add(keyword));
+        }
+      }
+    }
+    return Array.from(expanded);
   }
 }

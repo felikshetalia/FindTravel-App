@@ -1,4 +1,10 @@
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  IsArray,
+} from 'class-validator';
 
 export class CreateOfferDto {
   @IsOptional()
@@ -22,4 +28,9 @@ export class CreateOfferDto {
 
   @IsUUID()
   returnFlightId!: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tags?: string[];
 }

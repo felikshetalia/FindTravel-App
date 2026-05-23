@@ -88,6 +88,8 @@ model Offer {
   currency    String
   createdAt   DateTime @default(now())
 
+  tags String[] @default([])
+
   locationId       String @db.Uuid
   accommodationId  String @db.Uuid
   outboundFlightId String @db.Uuid

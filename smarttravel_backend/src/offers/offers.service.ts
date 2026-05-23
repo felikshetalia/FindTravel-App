@@ -71,6 +71,7 @@ export class OffersService {
         returnFlight: {
           connect: { id: dto.returnFlightId },
         },
+        tags: dto.tags ?? [],
       },
     });
   }
