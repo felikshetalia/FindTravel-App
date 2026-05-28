@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PreferencesJson, RequestDto, UserRequestDto } from './dto/request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { semanticKeywords } from './semantic-tags';
+import { semanticKeywords, semanticLocations } from './semantic-tags';
 
 @Injectable()
 export class AiService {
@@ -18,7 +18,8 @@ export class AiService {
 
     const widerInterests = this._expandInterests(preferences.interests);
     console.log(widerInterests);
-    const offers = await this._loadOffers(preferences);
+    const widerDestinations = this._expandDestination(preferences.destination);
+    const offers = await this._loadOffers(preferences, widerDestinations);
 
     if (offers.length === 0) {
       return {
@@ -34,33 +35,29 @@ export class AiService {
     };
   }
 
-  private async _loadOffers(preferences: PreferencesJson) {
+  private async _loadOffers(
+    preferences: PreferencesJson,
+    destinationMatches: string[],
+  ) {
     const offers = await this._prismaService.offer.findMany({
       where: {
-        ...(preferences.destination
+        ...(destinationMatches.length > 0
           ? {
               location: {
                 OR: [
-                  {
+                  ...destinationMatches.map((value) => ({
                     city: {
-                      contains: preferences.destination,
-                      mode: 'insensitive',
+                      equals: value,
+                      mode: 'insensitive' as const,
                     },
-                  },
-                  {
+                  })),
+                  ...destinationMatches.map((value) => ({
                     country: {
-                      contains: preferences.destination,
-                      mode: 'insensitive',
+                      equals: value,
+                      mode: 'insensitive' as const,
                     },
-                  },
+                  })),
                 ],
-              },
-            }
-          : {}),
-        ...(preferences.budget
-          ? {
-              fee: {
-                lte: preferences.budget,
               },
             }
           : {}),
@@ -220,5 +217,18 @@ Return exactly:
       }
     }
     return Array.from(expanded);
+  }
+  private _expandDestination(destination?: string | null) {
+    if (!destination) return [];
+
+    const normalized = destination.toLowerCase();
+
+    for (const [key, countries] of Object.entries(semanticLocations)) {
+      if (key.toLowerCase() === normalized) {
+        return countries;
+      }
+    }
+
+    return [destination];
   }
 }

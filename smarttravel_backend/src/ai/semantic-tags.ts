@@ -53,8 +53,6 @@ export const semanticLocations: Record<string, string[]> = {
     'Austria',
     'Germany',
     'France',
-    'Italy',
-    'Spain',
     'Poland',
     'Turkey',
   ],
