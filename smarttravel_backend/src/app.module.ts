@@ -13,6 +13,7 @@ import { AirportsModule } from './admin/airports/airports.module';
 import { FlightsService } from './admin/flights/flights.service';
 import { FlightsModule } from './admin/flights/flights.module';
 import { AiModule } from './ai/ai.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AiModule } from './ai/ai.module';
     AirportsModule,
     FlightsModule,
     AiModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

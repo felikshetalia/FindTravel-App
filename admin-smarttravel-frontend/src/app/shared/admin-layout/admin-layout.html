@@ -1,0 +1,8 @@
+<div class="admin-layout" [class.logged-in]="authService.isLoggedIn()">
+  @if (authService.isLoggedIn()) {
+    <app-sidebar></app-sidebar>
+  }
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

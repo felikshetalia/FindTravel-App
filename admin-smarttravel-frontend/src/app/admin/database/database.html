@@ -1,0 +1,26 @@
+<div class="database-container">
+  <div class="database-header">
+    <h1 class="database-title">Database</h1>
+  </div>
+
+  <div class="database-content">
+    <table class="database-table">
+      <thead>
+        <tr class="table-header">
+          <th class="table-header-cell">Table name</th>
+          <th class="table-header-cell size-column">Size</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (table of tables; track table.name) {
+          <tr class="table-row">
+            <td class="table-cell">
+              <a [routerLink]="table.link" class="table-link">{{ table.name }}</a>
+            </td>
+            <td class="table-cell size-column">{{ table.size }} items</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
