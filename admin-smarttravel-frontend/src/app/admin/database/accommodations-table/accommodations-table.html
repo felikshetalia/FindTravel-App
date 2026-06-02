@@ -29,13 +29,14 @@
             <tr class="data-row">
               <td class="data-cell">{{ accommodation.name }}</td>
               <td class="data-cell">
-                {{ accommodation.location?.city }}{{ accommodation.location?.state ? ', ' + accommodation.location.state : '' }}, {{ accommodation.location?.country }}
+                {{ accommodation.location.city }}{{ accommodation.location.state ? ', ' + accommodation.location.state : '' }}, {{ accommodation.location.country }}
               </td>
               <td class="data-cell">
-                {{ accommodation.address?.street }} {{ accommodation.address?.houseNumber }}, {{ accommodation.address?.postalCode }}
+                {{ accommodation.address.street }} {{ accommodation.address.houseNumber }}, {{ accommodation.address.postalCode }}
               </td>
-              <td class="data-cell">{{ accommodation.type }}</td>
-              <td class="data-cell">${{ accommodation.pricePerNight }}</td>
+              <td class="data-cell">{{ accommodation.costPerNight }} {{accommodation.currency}}</td>
+                            <td class="data-cell">{{accommodation.nights}}</td>
+
               <td class="data-cell actions-column">
                 <button class="action-btn edit-btn" (click)="onEdit(accommodation)" title="Edit">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

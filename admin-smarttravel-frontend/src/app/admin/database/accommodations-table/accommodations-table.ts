@@ -1,5 +1,6 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { Accommodation } from '../models';
 
@@ -12,12 +13,13 @@ import { Accommodation } from '../models';
 })
 export class AccommodationsTableComponent implements OnInit {
   private _apiService = inject(ApiService);
+  private _router = inject(Router);
 
   accommodations = signal<Accommodation[]>([]);
   isLoading = signal(false);
   error = signal<string | null>(null);
 
-  columns: string[] = ['Name', 'Location', 'Address', 'Type', 'Price/Night', 'Actions'];
+  columns: string[] = ['Name', 'Location', 'Address', 'Price/Night', 'Nights', 'Actions'];
 
   ngOnInit() {
     this.loadAccommodations();
@@ -40,11 +42,11 @@ export class AccommodationsTableComponent implements OnInit {
   }
 
   onAddNew() {
-    console.log('Add new accommodation');
+    this._router.navigate(['/admin/database/accommodations/add']);
   }
 
   onEdit(accommodation: Accommodation) {
-    console.log('Edit accommodation:', accommodation);
+    this._router.navigate(['/admin/database/accommodations', accommodation.id, 'edit']);
   }
 
   onDelete(accommodation: Accommodation) {

@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { Location } from '../models';
 @Component({
@@ -11,6 +12,7 @@ import { Location } from '../models';
 })
 export class LocationsTableComponent implements OnInit {
   private _apiService = inject(ApiService);
+  private _router = inject(Router);
 
   locations = signal<Location[]>([]);
   isLoading = signal(false);
@@ -39,11 +41,11 @@ export class LocationsTableComponent implements OnInit {
   }
 
   onAddNew() {
-    console.log('Add new location');
+    this._router.navigate(['/admin/database/locations/add']);
   }
 
   onEdit(location: Location) {
-    console.log('Edit location:', location);
+    this._router.navigate(['/admin/database/locations', location.id, 'edit']);
   }
 
   onDelete(location: Location) {

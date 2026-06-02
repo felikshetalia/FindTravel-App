@@ -18,9 +18,10 @@ export interface Accommodation {
   id: string;
   name: string;
   location: Location;
-  type: string;
-  pricePerNight: number;
+  costPerNight: number;
+  currency: string;
   address: Address;
+  nights: number;
   [key: string]: any;
 }
 

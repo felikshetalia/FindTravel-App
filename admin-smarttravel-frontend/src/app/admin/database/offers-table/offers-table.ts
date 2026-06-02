@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { Offer } from '../models';
 
@@ -12,6 +13,7 @@ import { Offer } from '../models';
 })
 export class OffersTableComponent implements OnInit {
   private _apiService = inject(ApiService);
+  private _router = inject(Router);
 
   offers = signal<Offer[]>([]);
   isLoading = signal(false);
@@ -51,11 +53,11 @@ export class OffersTableComponent implements OnInit {
   }
 
   onAddNew() {
-    console.log('Add new offer');
+    this._router.navigate(['/admin/database/offers/add']);
   }
 
   onEdit(offer: Offer) {
-    console.log('Edit offer:', offer);
+    this._router.navigate(['/admin/database/offers', offer.id, 'edit']);
   }
 
   onDelete(offer: Offer) {

@@ -1,15 +1,5 @@
 import { Routes } from '@angular/router';
-import { FallbackComponent } from './shared/fallback/fallback';
-import { LoginComponent } from './admin/login/login';
-import { RegisterComponent } from './admin/register/register';
-import { DashboardComponent } from './admin/dashboard/dashboard';
-import { DatabaseComponent } from './admin/database/database';
-import { OffersTableComponent } from './admin/database/offers-table/offers-table';
-import { FlightsTableComponent } from './admin/database/flights-table/flights-table';
-import { AccommodationsTableComponent } from './admin/database/accommodations-table/accommodations-table';
 import { AuthGuard } from './auth/auth.guard';
-import { AirportsTableComponent } from './admin/database/airports-table/airports-table';
-import { LocationsTableComponent } from './admin/database/locations-table/locations-table';
 
 export const routes: Routes = [
   {
@@ -24,18 +14,19 @@ export const routes: Routes = [
       },
       {
         path: 'login',
-        component: LoginComponent,
+        loadComponent: () => import('./admin/login/login').then((m) => m.LoginComponent),
       },
 
       {
         path: 'register',
-        component: RegisterComponent,
+        loadComponent: () => import('./admin/register/register').then((m) => m.RegisterComponent),
       },
 
       {
         path: 'dashboard',
         canActivate: [AuthGuard],
-        component: DashboardComponent,
+        loadComponent: () =>
+          import('./admin/dashboard/dashboard').then((m) => m.DashboardComponent),
       },
 
       {
@@ -44,27 +35,93 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            component: DatabaseComponent,
+            loadComponent: () =>
+              import('./admin/database/database').then((m) => m.DatabaseComponent),
           },
           {
             path: 'offers',
-            component: OffersTableComponent,
+            loadComponent: () =>
+              import('./admin/database/offers-table/offers-table').then(
+                (m) => m.OffersTableComponent,
+              ),
+          },
+          {
+            path: 'offers/add',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+          },
+          {
+            path: 'offers/:id/edit',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
           },
           {
             path: 'flights',
-            component: FlightsTableComponent,
+            loadComponent: () =>
+              import('./admin/database/flights-table/flights-table').then(
+                (m) => m.FlightsTableComponent,
+              ),
+          },
+          {
+            path: 'flights/add',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+          },
+          {
+            path: 'flights/:id/edit',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
           },
           {
             path: 'accommodations',
-            component: AccommodationsTableComponent,
+            loadComponent: () =>
+              import('./admin/database/accommodations-table/accommodations-table').then(
+                (m) => m.AccommodationsTableComponent,
+              ),
+          },
+          {
+            path: 'accommodations/add',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+          },
+          {
+            path: 'accommodations/:id/edit',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
           },
           {
             path: 'airports',
-            component: AirportsTableComponent,
+            loadComponent: () =>
+              import('./admin/database/airports-table/airports-table').then(
+                (m) => m.AirportsTableComponent,
+              ),
+          },
+          {
+            path: 'airports/add',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+          },
+          {
+            path: 'airports/:id/edit',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
           },
           {
             path: 'locations',
-            component: LocationsTableComponent,
+            loadComponent: () =>
+              import('./admin/database/locations-table/locations-table').then(
+                (m) => m.LocationsTableComponent,
+              ),
+          },
+          {
+            path: 'locations/add',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+          },
+          {
+            path: 'locations/:id/edit',
+            loadComponent: () =>
+              import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
           },
         ],
       },

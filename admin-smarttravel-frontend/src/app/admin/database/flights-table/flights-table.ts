@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { Flight } from '../models';
 import { DatePipe } from '@angular/common';
@@ -13,6 +14,7 @@ import { DatePipe } from '@angular/common';
 })
 export class FlightsTableComponent implements OnInit {
   private _apiService = inject(ApiService);
+  private _router = inject(Router);
 
   flights = signal<Flight[]>([]);
   isLoading = signal(false);
@@ -50,11 +52,11 @@ export class FlightsTableComponent implements OnInit {
   }
 
   onAddNew() {
-    console.log('Add new flight');
+    this._router.navigate(['/admin/database/flights/add']);
   }
 
   onEdit(flight: Flight) {
-    console.log('Edit flight:', flight);
+    this._router.navigate(['/admin/database/flights', flight.id, 'edit']);
   }
 
   onDelete(flight: Flight) {

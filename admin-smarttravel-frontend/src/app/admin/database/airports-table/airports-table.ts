@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { Airport } from '../models';
 @Component({
@@ -12,6 +12,7 @@ import { Airport } from '../models';
 })
 export class AirportsTableComponent implements OnInit {
   private _apiService = inject(ApiService);
+  private _router = inject(Router);
 
   airports = signal<Airport[]>([]);
   isLoading = signal(false);
@@ -40,11 +41,11 @@ export class AirportsTableComponent implements OnInit {
   }
 
   onAddNew() {
-    console.log('Add new airport');
+    this._router.navigate(['/admin/database/airports/add']);
   }
 
   onEdit(airport: Airport) {
-    console.log('Edit airport:', airport);
+    this._router.navigate(['/admin/database/airports', airport.iataCode, 'edit']);
   }
 
   onDelete(airport: Airport) {
