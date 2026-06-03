@@ -2,6 +2,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '../../../services/api.service';
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
 
 @Component({
   selector: 'app-entity-form',
@@ -14,11 +20,21 @@ export class EntityFormComponent implements OnInit {
   private _formBuilder = inject(FormBuilder);
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
+  private _apiService = inject(ApiService);
 
   form!: FormGroup;
   entityName = '';
   isEditMode = false;
   itemId: string | null = null;
+
+  // Dropdown options storage
+  dropdownOptions: { [key: string]: SelectOption[] } = {
+    airports: [],
+    locations: [],
+    addresses: [],
+    flights: [],
+    accommodations: [],
+  };
 
   // Field configuration for each entity type
   fieldConfigs: { [key: string]: FieldConfig[] } = {
@@ -27,13 +43,13 @@ export class EntityFormComponent implements OnInit {
       { name: 'costPerNight', label: 'Cost Per Night', type: 'number', required: true },
       { name: 'currency', label: 'Currency', type: 'text', required: true },
       { name: 'nights', label: 'Number of Nights', type: 'number', required: true },
-      { name: 'addressId', label: 'Address ID', type: 'text', required: true },
+      { name: 'addressId', label: 'Address', type: 'select', required: true, optionSource: 'addresses' },
     ],
     flights: [
       { name: 'airlineName', label: 'Airline Name', type: 'text', required: true },
       { name: 'flightNumber', label: 'Flight Number', type: 'text', required: true },
-      { name: 'fromIataCode', label: 'From Airport (IATA)', type: 'text', required: true },
-      { name: 'toIataCode', label: 'To Airport (IATA)', type: 'text', required: true },
+      { name: 'fromIataCode', label: 'From Airport', type: 'select', required: true, optionSource: 'airports' },
+      { name: 'toIataCode', label: 'To Airport', type: 'select', required: true, optionSource: 'airports' },
       { name: 'departureTime', label: 'Departure Time', type: 'datetime-local', required: true },
       { name: 'arrivalTime', label: 'Arrival Time', type: 'datetime-local', required: true },
       { name: 'price', label: 'Price', type: 'number', required: true },
@@ -41,8 +57,13 @@ export class EntityFormComponent implements OnInit {
     ],
     offers: [
       { name: 'description', label: 'Description', type: 'textarea', required: true },
-      { name: 'price', label: 'Price', type: 'number', required: true },
+      { name: 'fee', label: 'Price', type: 'number', required: true },
       { name: 'currency', label: 'Currency', type: 'text', required: true },
+      { name: 'locationId', label: 'Location', type: 'select', required: true, optionSource: 'locations' },
+      { name: 'outboundFlightId', label: 'Outbound Flight', type: 'select', required: true, optionSource: 'flights' },
+      { name: 'returnFlightId', label: 'Return Flight', type: 'select', required: true, optionSource: 'flights' },
+      { name: 'accommodationId', label: 'Accommodation', type: 'select', required: true, optionSource: 'accommodations' },
+      { name: 'tags', label: 'Tags (comma separated)', type: 'tags', required: false },
     ],
     locations: [
       { name: 'city', label: 'City', type: 'text', required: true },
@@ -52,6 +73,13 @@ export class EntityFormComponent implements OnInit {
     airports: [
       { name: 'iataCode', label: 'IATA Code', type: 'text', required: true },
       { name: 'name', label: 'Airport Name', type: 'text', required: true },
+      { name: 'locationId', label: 'Location', type: 'select', required: true, optionSource: 'locations' },
+    ],
+    addresses: [
+      { name: 'street', label: 'Street', type: 'text', required: true },
+      { name: 'houseNumber', label: 'House Number', type: 'text', required: true },
+      { name: 'postalCode', label: 'Postal Code', type: 'text', required: true },
+      { name: 'locationId', label: 'Location', type: 'select', required: true, optionSource: 'locations' },
     ],
   };
 
@@ -65,6 +93,7 @@ export class EntityFormComponent implements OnInit {
       this.entityName = urlSegments[3]; // 'offers', 'flights', 'accommodations', etc.
 
       this.initializeForm();
+      this.loadDropdownData();
     });
   }
 
@@ -86,6 +115,48 @@ export class EntityFormComponent implements OnInit {
     // this.loadEntityData(this.itemId);
   }
 
+  private loadDropdownData() {
+    // Load locations
+    this._apiService.getLocations().subscribe((locations) => {
+      this.dropdownOptions['locations'] = locations.map((loc) => ({
+        value: loc.id,
+        label: `${loc.city}, ${loc.state || ''} ${loc.country}`.trim(),
+      }));
+    });
+
+    // Load airports
+    this._apiService.getAirports().subscribe((airports) => {
+      this.dropdownOptions['airports'] = airports.map((airport) => ({
+        value: airport.iataCode,
+        label: `${airport.iataCode} - ${airport.name}`,
+      }));
+    });
+
+    // Load addresses
+    this._apiService.getAddresses().subscribe((addresses) => {
+      this.dropdownOptions['addresses'] = addresses.map((addr) => ({
+        value: addr.id,
+        label: `${addr.street} ${addr.houseNumber}, ${addr.postalCode}`,
+      }));
+    });
+
+    // Load flights
+    this._apiService.getFlights().subscribe((flights) => {
+      this.dropdownOptions['flights'] = flights.map((flight) => ({
+        value: flight.id,
+        label: `${flight.airlineName} ${flight.flightNumber} (${flight.fromIataCode} → ${flight.toIataCode})`,
+      }));
+    });
+
+    // Load accommodations
+    this._apiService.getAccommodations().subscribe((accommodations) => {
+      this.dropdownOptions['accommodations'] = accommodations.map((acc) => ({
+        value: acc.id,
+        label: `${acc.name} - €${acc.costPerNight}/night (${acc.nights} nights)`,
+      }));
+    });
+  }
+
   get fields(): FieldConfig[] {
     return this.fieldConfigs[this.entityName] || [];
   }
@@ -96,10 +167,25 @@ export class EntityFormComponent implements OnInit {
     return `${action} {{ ${singular} }}`;
   }
 
+  getDropdownOptions(field: FieldConfig): SelectOption[] {
+    const optionSource = field.optionSource;
+    return this.dropdownOptions[optionSource || ''] || [];
+  }
+
   onSubmit() {
     if (this.form.valid) {
+      const formData = { ...this.form.value };
+
+      // Handle tags conversion for offers
+      if (this.entityName === 'offers' && formData.tags) {
+        formData.tags = formData.tags
+          .split(',')
+          .map((tag: string) => tag.trim())
+          .filter((tag: string) => tag.length > 0);
+      }
+
       // TODO: Call API to save the entity
-      console.log('Form submitted:', this.form.value);
+      console.log('Form submitted:', formData);
 
       // Redirect back to the table
       this._router.navigate([`/admin/database/${this.entityName}`]);
@@ -117,4 +203,5 @@ interface FieldConfig {
   label: string;
   type: string;
   required: boolean;
+  optionSource?: string;
 }

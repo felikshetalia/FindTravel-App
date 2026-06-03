@@ -7,14 +7,39 @@
     <div class="form-fields">
       @for (field of fields; track field.name) {
         <div class="form-group">
+          <label [for]="field.name" class="form-label">{{ field.label }}</label>
+          
           @if (field.type === 'textarea') {
             <textarea
+              [id]="field.name"
               [formControlName]="field.name"
               class="form-input"
               placeholder="Enter {{ field.label | lowercase }}"
             ></textarea>
+          } @else if (field.type === 'select') {
+            <select
+              [id]="field.name"
+              [formControlName]="field.name"
+              class="form-input"
+              [required]="field.required"
+            >
+              <option value="">-- Select {{ field.label | lowercase }} --</option>
+              @for (option of getDropdownOptions(field); track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          } @else if (field.type === 'tags') {
+            <input
+              [id]="field.name"
+              type="text"
+              [formControlName]="field.name"
+              class="form-input"
+              placeholder="E.g., luxury, beach, summer (comma separated)"
+            />
+            <small class="field-hint">Enter tags separated by commas. Example: luxury, beach, summer</small>
           } @else {
             <input
+              [id]="field.name"
               [type]="field.type"
               [formControlName]="field.name"
               class="form-input"
@@ -22,6 +47,7 @@
               [required]="field.required"
             />
           }
+          
           @if (form.get(field.name)?.invalid && form.get(field.name)?.touched) {
             <span class="error-message">{{ field.label }} is required</span>
           }
