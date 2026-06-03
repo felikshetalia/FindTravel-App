@@ -4,23 +4,31 @@
   </div>
 
   <div class="database-content">
-    <table class="database-table">
-      <thead>
-        <tr class="table-header">
-          <th class="table-header-cell">Table name</th>
-          <th class="table-header-cell size-column">Size</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (table of tables; track table.name) {
-          <tr class="table-row">
-            <td class="table-cell">
-              <a [routerLink]="table.link" class="table-link">{{ table.name }}</a>
-            </td>
-            <td class="table-cell size-column">{{ table.size }} items</td>
+    @if (error()) {
+      <div class="error-banner">{{ error() }}</div>
+    }
+
+    @if (isLoading()) {
+      <div class="loading-state">Loading tables...</div>
+    } @else {
+      <table class="database-table">
+        <thead>
+          <tr class="table-header">
+            <th class="table-header-cell">Table name</th>
+            <th class="table-header-cell size-column">Size</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (table of tables(); track table.name) {
+            <tr class="table-row">
+              <td class="table-cell">
+                <a [routerLink]="table.link" class="table-link">{{ table.name }}</a>
+              </td>
+              <td class="table-cell size-column">{{ table.size }} items</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   </div>
 </div>
