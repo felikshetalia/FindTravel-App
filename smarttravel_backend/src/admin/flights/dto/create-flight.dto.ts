@@ -1,9 +1,7 @@
 import {
-  IsDate,
-  IsDecimal,
+  IsDateString,
   IsNumber,
   IsString,
-  IsUUID,
   Length,
   Matches,
 } from 'class-validator';
@@ -15,13 +13,13 @@ export class CreateFlightDto {
   @IsString()
   flightNumber!: string;
 
-  @IsDate()
+  @IsDateString()
   departureTime!: Date;
 
-  @IsDate()
+  @IsDateString()
   arrivalTime!: Date;
 
-  @IsDecimal()
+  @IsNumber()
   price!: number;
 
   @IsString()

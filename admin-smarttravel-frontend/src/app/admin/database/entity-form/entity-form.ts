@@ -31,7 +31,7 @@ export class EntityFormComponent implements OnInit {
   dropdownOptions: { [key: string]: SelectOption[] } = {
     airports: [],
     locations: [],
-    addresses: [],
+    // addresses: [],
     flights: [],
     accommodations: [],
   };
@@ -43,12 +43,15 @@ export class EntityFormComponent implements OnInit {
       { name: 'costPerNight', label: 'Cost Per Night', type: 'number', required: true },
       { name: 'currency', label: 'Currency', type: 'text', required: true },
       { name: 'nights', label: 'Number of Nights', type: 'number', required: true },
+      { name: 'street', label: 'Street', type: 'text', required: true },
+      { name: 'houseNumber', label: 'House Number', type: 'text', required: true },
+      { name: 'postalCode', label: 'Postal Code', type: 'text', required: true },
       {
-        name: 'addressId',
-        label: 'Address',
+        name: 'locationId',
+        label: 'Location',
         type: 'select',
         required: true,
-        optionSource: 'addresses',
+        optionSource: 'locations',
       },
     ],
     flights: [
@@ -228,8 +231,18 @@ export class EntityFormComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      const formData = { ...this.form.value };
+      let formData = { ...this.form.value };
+      if ('departureTime' in formData) {
+        formData.departureTime = new Date(formData.departureTime).toISOString();
+      }
 
+      if ('arrivalTime' in formData) {
+        formData.arrivalTime = new Date(formData.arrivalTime).toISOString();
+      }
+
+      if ('price' in formData) {
+        formData.price = Number(formData.price);
+      }
       // Handle tags conversion for offers
       if (this.entityName === 'offers' && formData.tags) {
         formData.tags = formData.tags
@@ -238,11 +251,48 @@ export class EntityFormComponent implements OnInit {
           .filter((tag: string) => tag.length > 0);
       }
 
+      if (this.entityName === 'accommodations') {
+        const addressBody = {
+          street: formData.street,
+          houseNumber: formData.houseNumber,
+          postalCode: formData.postalCode,
+          locationId: formData.locationId,
+        };
+        this._apiService.createEntity<any>('addresses', addressBody).subscribe({
+          next: (createdAddress) => {
+            const accommodationBody = {
+              name: formData.name,
+              costPerNight: Number(formData.costPerNight),
+              currency: formData.currency,
+              nights: Number(formData.nights),
+              addressId: createdAddress.id,
+            };
+            this._apiService.createEntity(this.entityName, accommodationBody).subscribe({
+              next: () => {
+                this._router.navigate([`/admin/database/${this.entityName}`]);
+              },
+              error: (err) => {
+                console.error('Error creating accommodation:', err);
+              },
+            });
+          },
+          error: (err) => console.error('Error creating address:', err),
+        });
+        return;
+      }
+
       // TODO: Call API to save the entity
+      this._apiService.createEntity(this.entityName, formData).subscribe({
+        next: () => {
+          this._router.navigate([`/admin/database/${this.entityName}`]);
+        },
+        error: (err) => {
+          console.error(`Error creating ${this.entityName}`, err);
+        },
+      });
       console.log('Form submitted:', formData);
 
       // Redirect back to the table
-      this._router.navigate([`/admin/database/${this.entityName}`]);
     }
   }
 

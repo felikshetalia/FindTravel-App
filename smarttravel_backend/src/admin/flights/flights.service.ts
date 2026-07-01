@@ -12,9 +12,9 @@ export class FlightsService {
       data: {
         airlineName: dto.airlineName,
         flightNumber: dto.flightNumber,
-        departureTime: dto.departureTime,
-        arrivalTime: dto.arrivalTime,
-        price: dto.price,
+        departureTime: new Date(dto.departureTime),
+        arrivalTime: new Date(dto.arrivalTime),
+        price: Number(dto.price),
         currency: dto.currency,
         fromIataCode: dto.fromIataCode,
         toIataCode: dto.toIataCode,

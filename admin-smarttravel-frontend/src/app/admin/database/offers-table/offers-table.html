@@ -32,15 +32,15 @@
           <td class="data-cell">{{ offer.currency }}</td>
           <td class="data-cell">{{ offer.createdAt | date: 'short' }}</td>
           <td class="data-cell">
-            {{ offer.location?.city }}{{ offer.location?.state ? ', ' + offer.location.state : '' }}, {{ offer.location?.country }}
+            {{ offer.location.city }}{{ offer.location.state ? ', ' + offer.location.state : '' }}, {{ offer.location.country }}
           </td>
           <td class="data-cell">
             @for(acc of offer.accommodation; track acc.id) {
               {{ acc.name }}{{ !$last ? ', ' : '' }}
             }
           </td>
-          <td class="data-cell">{{ offer.outboundFlight?.flightNumber }}</td>
-          <td class="data-cell">{{ offer.returnFlight?.flightNumber }}</td>
+          <td class="data-cell">{{ offer.outboundFlight.flightNumber }}</td>
+          <td class="data-cell">{{ offer.returnFlight.flightNumber }}</td>
           <td class="data-cell">
             @for(tag of offer.tags; track tag){
               {{ tag }}{{ !$last ? ', ' : '' }}
