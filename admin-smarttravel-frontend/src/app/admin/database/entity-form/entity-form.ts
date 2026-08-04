@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,8 +23,8 @@ export class EntityFormComponent implements OnInit {
   private _apiService = inject(ApiService);
 
   form!: FormGroup;
-  entityName = '';
-  isEditMode = false;
+  entityName = signal<string>('');
+  isEditMode = signal<boolean>(false);
   itemId: string | null = null;
 
   // Dropdown options storage
@@ -143,11 +143,11 @@ export class EntityFormComponent implements OnInit {
   ngOnInit() {
     this._route.paramMap.subscribe((params) => {
       this.itemId = params.get('id');
-      this.isEditMode = !!this.itemId;
+      this.isEditMode.set(!!this.itemId);
 
       // Extract entity name from URL (e.g., 'offers' from '/admin/database/offers/add')
       const urlSegments = this._router.url.split('/');
-      this.entityName = urlSegments[3]; // 'offers', 'flights', 'accommodations', etc.
+      this.entityName.set(urlSegments[3]); // 'offers', 'flights', 'accommodations', etc.
 
       this.initializeForm();
       this.loadDropdownData();
@@ -155,7 +155,7 @@ export class EntityFormComponent implements OnInit {
   }
 
   private initializeForm() {
-    const fields = this.fieldConfigs[this.entityName] || [];
+    const fields = this.fieldConfigs[this.entityName()] || [];
     const formControls: { [key: string]: any } = {};
 
     fields.forEach((field) => {
@@ -215,12 +215,12 @@ export class EntityFormComponent implements OnInit {
   }
 
   get fields(): FieldConfig[] {
-    return this.fieldConfigs[this.entityName] || [];
+    return this.fieldConfigs[this.entityName()] || [];
   }
 
   get formattedTitle(): string {
-    const action = this.isEditMode ? 'Edit' : 'Add new';
-    const singular = this.entityName.slice(0, -1); // Remove 's' for singular form
+    const action = this.isEditMode() ? 'Edit' : 'Add new';
+    const singular = this.entityName().slice(0, -1); // Remove 's' for singular form
     return `${action} {{ ${singular} }}`;
   }
 
@@ -244,14 +244,14 @@ export class EntityFormComponent implements OnInit {
         formData.price = Number(formData.price);
       }
       // Handle tags conversion for offers
-      if (this.entityName === 'offers' && formData.tags) {
+      if (this.entityName() === 'offers' && formData.tags) {
         formData.tags = formData.tags
           .split(',')
           .map((tag: string) => tag.trim())
           .filter((tag: string) => tag.length > 0);
       }
 
-      if (this.entityName === 'accommodations') {
+      if (this.entityName() === 'accommodations') {
         const addressBody = {
           street: formData.street,
           houseNumber: formData.houseNumber,
@@ -267,9 +267,9 @@ export class EntityFormComponent implements OnInit {
               nights: Number(formData.nights),
               addressId: createdAddress.id,
             };
-            this._apiService.createEntity(this.entityName, accommodationBody).subscribe({
+            this._apiService.createEntity(this.entityName(), accommodationBody).subscribe({
               next: () => {
-                this._router.navigate([`/admin/database/${this.entityName}`]);
+                this._router.navigate([`/admin/database/${this.entityName()}`]);
               },
               error: (err) => {
                 console.error('Error creating accommodation:', err);
@@ -282,12 +282,12 @@ export class EntityFormComponent implements OnInit {
       }
 
       // TODO: Call API to save the entity
-      this._apiService.createEntity(this.entityName, formData).subscribe({
+      this._apiService.createEntity(this.entityName(), formData).subscribe({
         next: () => {
-          this._router.navigate([`/admin/database/${this.entityName}`]);
+          this._router.navigate([`/admin/database/${this.entityName()}`]);
         },
         error: (err) => {
-          console.error(`Error creating ${this.entityName}`, err);
+          console.error(`Error creating ${this.entityName()}`, err);
         },
       });
       console.log('Form submitted:', formData);
@@ -298,7 +298,7 @@ export class EntityFormComponent implements OnInit {
 
   onCancel() {
     // Redirect back to the table
-    this._router.navigate([`/admin/database/${this.entityName}`]);
+    this._router.navigate([`/admin/database/${this.entityName()}`]);
   }
 }
 
