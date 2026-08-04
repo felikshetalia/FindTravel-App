@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
@@ -14,6 +14,7 @@ interface DatabaseTable {
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './database.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './database.scss',
 })
 export class DatabaseComponent implements OnInit {

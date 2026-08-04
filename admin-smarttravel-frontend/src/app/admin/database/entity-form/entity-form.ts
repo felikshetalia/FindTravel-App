@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,7 @@ interface SelectOption {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './entity-form.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './entity-form.scss',
 })
 export class EntityFormComponent implements OnInit {

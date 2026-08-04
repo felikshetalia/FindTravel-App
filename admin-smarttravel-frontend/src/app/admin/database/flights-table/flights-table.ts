@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
   standalone: true,
   imports: [CommonModule, DatePipe],
   templateUrl: './flights-table.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './flights-table.scss',
 })
 export class FlightsTableComponent implements OnInit {

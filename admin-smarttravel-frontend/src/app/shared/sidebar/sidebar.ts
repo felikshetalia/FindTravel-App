@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 
@@ -7,6 +7,7 @@ import { AuthService } from '../../auth/auth.service';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './sidebar.scss',
 })
 export class SidebarComponent {
