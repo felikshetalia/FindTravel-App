@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -8,6 +8,7 @@ import { Location } from '../models';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './locations-table.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './locations-table.scss',
 })
 export class LocationsTableComponent implements OnInit {

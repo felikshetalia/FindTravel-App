@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { signal, computed } from '@angular/core';
 import { interval, takeUntil, Subject } from 'rxjs';
@@ -9,6 +9,7 @@ import { SidebarComponent } from '../../shared/sidebar/sidebar';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './dashboard.scss',
 })
 export class DashboardComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -9,6 +9,7 @@ import { Offer } from '../models';
   standalone: true,
   imports: [CommonModule, DatePipe],
   templateUrl: './offers-table.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './offers-table.scss',
 })
 export class OffersTableComponent implements OnInit {
