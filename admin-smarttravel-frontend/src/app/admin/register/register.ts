@@ -8,7 +8,7 @@ import { AuthService } from '../../auth/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './register.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './register.scss',
 })
 export class RegisterComponent {

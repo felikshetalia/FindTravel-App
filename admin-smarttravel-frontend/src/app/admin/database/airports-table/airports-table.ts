@@ -8,7 +8,7 @@ import { Airport } from '../models';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './airports-table.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './airports-table.scss',
 })
 export class AirportsTableComponent implements OnInit {

@@ -14,7 +14,7 @@ interface SelectOption {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './entity-form.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './entity-form.scss',
 })
 export class EntityFormComponent implements OnInit {

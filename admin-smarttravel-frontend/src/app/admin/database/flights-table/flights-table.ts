@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
   standalone: true,
   imports: [CommonModule, DatePipe],
   templateUrl: './flights-table.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './flights-table.scss',
 })
 export class FlightsTableComponent implements OnInit {

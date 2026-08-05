@@ -8,7 +8,7 @@ import { AuthService } from '../../auth/auth.service';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './login.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './login.scss',
 })
 export class LoginComponent {

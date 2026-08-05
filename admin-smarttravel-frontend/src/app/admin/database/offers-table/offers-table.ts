@@ -9,7 +9,7 @@ import { Offer } from '../models';
   standalone: true,
   imports: [CommonModule, DatePipe],
   templateUrl: './offers-table.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './offers-table.scss',
 })
 export class OffersTableComponent implements OnInit {

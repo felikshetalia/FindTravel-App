@@ -14,7 +14,7 @@ interface DatabaseTable {
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './database.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './database.scss',
 })
 export class DatabaseComponent implements OnInit {

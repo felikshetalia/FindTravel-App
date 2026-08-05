@@ -7,7 +7,7 @@ import { AuthService } from '../../auth/auth.service';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './sidebar.scss',
 })
 export class SidebarComponent {

@@ -8,7 +8,7 @@ import { Location } from '../models';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './locations-table.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './locations-table.scss',
 })
 export class LocationsTableComponent implements OnInit {

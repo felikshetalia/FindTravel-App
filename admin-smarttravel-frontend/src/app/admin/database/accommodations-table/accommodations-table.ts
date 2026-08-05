@@ -9,7 +9,7 @@ import { Accommodation } from '../models';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './accommodations-table.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './accommodations-table.scss',
 })
 export class AccommodationsTableComponent implements OnInit {

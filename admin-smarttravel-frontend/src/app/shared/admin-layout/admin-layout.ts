@@ -8,7 +8,7 @@ import { AuthService } from '../../auth/auth.service';
   selector: 'app-admin-layout',
   imports: [RouterOutlet, SidebarComponent, CommonModule],
   templateUrl: './admin-layout.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './admin-layout.scss',
 })
 export class AdminLayoutComponent implements OnInit {
