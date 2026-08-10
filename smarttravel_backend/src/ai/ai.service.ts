@@ -204,14 +204,17 @@ Return exactly:
   }
 
   private _expandInterests(interests: string[] = []) {
+    if (!Array.isArray(interests)) return [];
+
     const expanded = new Set<string>();
+
     for (const interest of interests) {
       const normalized = interest.toLowerCase();
 
       expanded.add(normalized);
 
       for (const [key, keywords] of Object.entries(semanticKeywords)) {
-        if (key === normalized || keywords.includes(normalized)) {
+        if (key.toLowerCase() === normalized || keywords.includes(normalized)) {
           keywords.forEach((keyword) => expanded.add(keyword));
         }
       }
