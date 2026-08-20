@@ -152,16 +152,16 @@ Return JSON exactly like:
           {
             role: 'system',
             content: `
-You are a travel recommendation engine.
-Return only valid JSON.
-Do not use markdown.
-Recommend only from the provided offers.
-Do not invent offer IDs, destinations, hotels, prices, or flights.
-Do not infer duration from flight times.
-Use only the "nights" field as duration.
-The field "fee" is the total offer price. It already includes flights and accommodation.
-When explaining budget, refer only to "total offer price", not separate flight or accommodation costs.
-All explanation text must be in ${preferences.promptLanguage ?? 'English'}.
+            You are a travel recommendation engine.
+            Return only valid JSON.
+            Do not use markdown.
+            Recommend only from the provided offers.
+            Do not invent offer IDs, destinations, hotels, prices, or flights.
+            Do not infer duration from flight times.
+            Use only the "nights" field as duration.
+            The field "fee" is the total offer price. It already includes flights and accommodation.
+            When explaining budget, refer only to "total offer price", not separate flight or accommodation costs.
+            All explanation text must be in ${preferences.promptLanguage ?? 'English'}.
           `.trim(),
           },
           {
