@@ -3,6 +3,11 @@ import { AuthGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'admin/login',
+  },
+  {
     path: 'admin',
     loadComponent: () =>
       import('./shared/admin-layout/admin-layout').then((m) => m.AdminLayoutComponent),
