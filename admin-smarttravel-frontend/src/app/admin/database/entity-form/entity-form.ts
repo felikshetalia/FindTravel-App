@@ -244,6 +244,17 @@ export class EntityFormComponent implements OnInit {
       if ('price' in formData) {
         formData.price = Number(formData.price);
       }
+      if ('fee' in formData) {
+        formData.fee = Number(formData.fee);
+      }
+      console.log(formData);
+      if ('costPerNight' in formData) {
+        formData.costPerNight = Number(formData.costPerNight);
+      }
+
+      if ('nights' in formData) {
+        formData.nights = Number(formData.nights);
+      }
       // Handle tags conversion for offers
       if (this.entityName() === 'offers' && formData.tags) {
         formData.tags = formData.tags
