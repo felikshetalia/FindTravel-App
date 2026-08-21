@@ -17,13 +17,15 @@ export class AuthGuard implements CanActivate {
     private router: Router,
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
-    if (this.authService.isLoggedIn()) {
+  async canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Promise<boolean | UrlTree> {
+    const isAuthed = await this.authService.checkAuth();
+
+    if (isAuthed) {
       return true;
     }
-
-    // Clear auth state and redirect to login if not authenticated
-    this.authService.logout();
     return this.router.createUrlTree(['/admin/login']);
   }
 }

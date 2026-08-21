@@ -5,10 +5,7 @@ import { Injectable, signal } from '@angular/core';
 })
 export class AuthService {
   isLoggedIn = signal(false);
-  private accessToken: string | null = null;
   private apiUrl = 'http://localhost:3000/api/auth';
-
-  constructor() {}
 
   async login(email: string, password: string): Promise<boolean> {
     try {
@@ -17,6 +14,7 @@ export class AuthService {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
 
@@ -25,10 +23,6 @@ export class AuthService {
         throw new Error(error.message || 'Login failed');
       }
 
-      const data = await response.json();
-      this.accessToken = data.accessToken;
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
       this.isLoggedIn.set(true);
       return true;
     } catch (error: any) {
@@ -43,6 +37,7 @@ export class AuthService {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password, setupKey }),
       });
 
@@ -51,32 +46,37 @@ export class AuthService {
         throw new Error(error.message || 'Registration failed');
       }
 
-      const data = await response.json();
       return true;
     } catch (error: any) {
       throw new Error(error.message || 'An error occurred during registration');
     }
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
+    await fetch(`${this.apiUrl}/admin/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
     this.isLoggedIn.set(false);
-    this.accessToken = null;
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
   }
 
-  checkAuth(): boolean {
-    // Check if user is logged in from localStorage on app init
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      this.accessToken = token;
+  async checkAuth(): Promise<boolean> {
+    try {
+      const res = await fetch(`${this.apiUrl}/me`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        this.isLoggedIn.set(false);
+        return false;
+      }
+
       this.isLoggedIn.set(true);
       return true;
+    } catch {
+      this.isLoggedIn.set(false);
+      return false;
     }
-    return false;
-  }
-
-  getAccessToken(): string | null {
-    return this.accessToken || localStorage.getItem('accessToken');
   }
 }
