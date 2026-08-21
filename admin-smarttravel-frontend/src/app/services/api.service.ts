@@ -12,10 +12,8 @@ export class ApiService {
 
   createEntity<T>(entityName: string, data: unknown) {
     return entityName === 'offer'
-      ? this._httpClient.post<T>(`http://localhost:3000/api/offers`, data, {
-          withCredentials: true,
-        })
-      : this._httpClient.post<T>(`${this._apiUrl}/${entityName}`, data, { withCredentials: true });
+      ? this._httpClient.post<T>(`http://localhost:3000/api/offers`, data)
+      : this._httpClient.post<T>(`${this._apiUrl}/${entityName}`, data);
   }
 
   deleteEntity(entityName: string, id: string) {
@@ -24,11 +22,11 @@ export class ApiService {
 
   // Locations
   getLocations(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/locations`, { withCredentials: true });
+    return this._httpClient.get<any[]>(`${this._apiUrl}/locations`);
   }
 
   createLocation(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/locations`, data, { withCredentials: true });
+    return this._httpClient.post(`${this._apiUrl}/locations`, data);
   }
 
   updateLocation(id: string, data: any): Observable<any> {
@@ -41,11 +39,11 @@ export class ApiService {
 
   // Addresses
   getAddresses(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/addresses`, { withCredentials: true });
+    return this._httpClient.get<any[]>(`${this._apiUrl}/addresses`);
   }
 
   createAddress(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/addresses`, data, { withCredentials: true });
+    return this._httpClient.post(`${this._apiUrl}/addresses`, data);
   }
 
   updateAddress(id: string, data: any): Observable<any> {
@@ -58,7 +56,7 @@ export class ApiService {
 
   // Airports
   getAirports(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/airports`, { withCredentials: true });
+    return this._httpClient.get<any[]>(`${this._apiUrl}/airports`);
   }
 
   getAirportsWithRelations(): Observable<any[]> {
@@ -78,7 +76,7 @@ export class ApiService {
   }
 
   createAirport(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/airports`, data, { withCredentials: true });
+    return this._httpClient.post(`${this._apiUrl}/airports`, data);
   }
 
   updateAirport(id: string, data: any): Observable<any> {
@@ -91,7 +89,7 @@ export class ApiService {
 
   // Accommodations
   getAccommodations(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/accommodations`, { withCredentials: true });
+    return this._httpClient.get<any[]>(`${this._apiUrl}/accommodations`);
   }
 
   getAccommodationsWithRelations(): Observable<any[]> {
@@ -135,7 +133,7 @@ export class ApiService {
   }
 
   createAccommodation(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/accommodations`, data, { withCredentials: true });
+    return this._httpClient.post(`${this._apiUrl}/accommodations`, data);
   }
 
   updateAccommodation(id: string, data: any): Observable<any> {
@@ -148,11 +146,11 @@ export class ApiService {
 
   // Flights
   getFlights(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/flights`, { withCredentials: true });
+    return this._httpClient.get<any[]>(`${this._apiUrl}/flights`);
   }
 
   createFlight(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/flights`, data, { withCredentials: true });
+    return this._httpClient.post(`${this._apiUrl}/flights`, data);
   }
 
   updateFlight(id: string, data: any): Observable<any> {
@@ -165,9 +163,7 @@ export class ApiService {
 
   // Offers
   getOffers(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`http://localhost:3000/api/offers`, {
-      withCredentials: true,
-    });
+    return this._httpClient.get<any[]>(`http://localhost:3000/api/offers`);
   }
 
   getOffersWithRelations(): Observable<any[]> {
@@ -199,9 +195,7 @@ export class ApiService {
   }
 
   createOffer(data: any): Observable<any> {
-    return this._httpClient.post(`http://localhost:3000/api/offers`, data, {
-      withCredentials: true,
-    });
+    return this._httpClient.post(`http://localhost:3000/api/offers`, data);
   }
 
   updateOffer(id: string, data: any): Observable<any> {
