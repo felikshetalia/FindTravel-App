@@ -195,14 +195,14 @@ export class ApiService {
   }
 
   createOffer(data: any): Observable<any> {
-    return this._httpClient.post(`http://localhost:3000/api/offers`, data);
+    return this._httpClient.post(`http://localhost:3000/api/admin/offers`, data);
   }
 
   updateOffer(id: string, data: any): Observable<any> {
-    return this._httpClient.patch(`http://localhost:3000/api/offers/${id}`, data);
+    return this._httpClient.patch(`http://localhost:3000/api/admin/offers/${id}`, data);
   }
 
   deleteOffer(id: string): Observable<any> {
-    return this._httpClient.delete(`http://localhost:3000/api/offers/${id}`);
+    return this._httpClient.delete(`http://localhost:3000/api/admin/offers/${id}`);
   }
 }

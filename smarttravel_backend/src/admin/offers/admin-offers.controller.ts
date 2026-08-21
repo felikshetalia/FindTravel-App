@@ -7,12 +7,15 @@ import {
   Post,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { OffersService } from 'src/offers/offers.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { UpdateOfferDto } from './dto/update-offer.sto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 // your connect to the service for the logic but this file defines the endpoints
+@UseGuards(JwtAuthGuard)
 @Controller('admin/offers')
 export class AdminOffersController {
   constructor(private readonly _offersService: OffersService) {}

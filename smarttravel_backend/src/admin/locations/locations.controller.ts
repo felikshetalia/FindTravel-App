@@ -7,11 +7,14 @@ import {
   Patch,
   Get,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { LocationsService } from './locations.service';
 import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('admin/locations')
 export class AdminLocationsController {
   constructor(private readonly _locationsService: LocationsService) {}
