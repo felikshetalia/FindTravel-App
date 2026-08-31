@@ -169,8 +169,80 @@ export class EntityFormComponent implements OnInit {
 
     this.form = this._formBuilder.group(formControls);
 
-    // TODO: If in edit mode, load the entity data and populate the form
-    // this.loadEntityData(this.itemId);
+    if (this.isEditMode()) {
+      const entity = this._route.snapshot.data['entity'];
+
+      if (entity) {
+        this.populateForm(entity);
+      }
+    }
+  }
+
+  private populateForm(entity: any) {
+    let formData = { ...entity };
+
+    if (this.entityName() === 'accommodations') {
+      formData = {
+        ...entity,
+
+        street: entity.address?.street,
+        houseNumber: entity.address?.houseNumber,
+        postalCode: entity.address?.postalCode,
+
+        locationId: entity.address?.locationId ?? entity.location?.id,
+      };
+    }
+
+    if (this.entityName() === 'airports') {
+      formData = {
+        ...entity,
+        locationId: entity.locationId ?? entity.location?.id,
+      };
+    }
+
+    if (this.entityName() === 'offers') {
+      formData = {
+        ...entity,
+
+        locationId: entity.locationId ?? entity.location?.id,
+
+        outboundFlightId: entity.outboundFlightId ?? entity.outboundFlight?.id,
+
+        returnFlightId: entity.returnFlightId ?? entity.returnFlight?.id,
+
+        accommodationId: entity.accommodationId ?? entity.accommodation?.id,
+
+        tags: Array.isArray(entity.tags) ? entity.tags.join(', ') : entity.tags,
+      };
+    }
+
+    if (this.entityName() === 'flights') {
+      formData = {
+        ...entity,
+
+        departureTime: this.toDateTimeLocal(entity.departureTime),
+
+        arrivalTime: this.toDateTimeLocal(entity.arrivalTime),
+      };
+    }
+
+    this.form.patchValue(formData);
+  }
+
+  private toDateTimeLocal(value: string | null | undefined): string {
+    if (!value) {
+      return '';
+    }
+
+    const date = new Date(value);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   private loadDropdownData() {

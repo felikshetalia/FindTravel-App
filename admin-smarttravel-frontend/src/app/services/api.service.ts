@@ -20,6 +20,10 @@ export class ApiService {
     return this._httpClient.delete(`${this._apiUrl}/${entityName}/${id}`);
   }
 
+  getEntityById<T>(entityType: string, id: string) {
+    return this._httpClient.get<T>(`${this._apiUrl}/${entityType}/${id}`);
+  }
+
   // Locations
   getLocations(): Observable<any[]> {
     return this._httpClient.get<any[]>(`${this._apiUrl}/locations`);
