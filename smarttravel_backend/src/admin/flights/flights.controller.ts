@@ -24,6 +24,11 @@ export class AdminFlightsController {
     return this._flightsService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this._flightsService.findOne(id);
+  }
+
   @Post()
   create(@Body() dto: CreateFlightDto) {
     return this._flightsService.create(dto);

@@ -21,6 +21,19 @@ export class AccommodationsService {
     });
   }
 
+  findOne(id: string) {
+    return this._prismaService.accommodation.findUnique({
+      where: { id },
+      include: {
+        address: {
+          include: {
+            location: true,
+          },
+        },
+      },
+    });
+  }
+
   findAll() {
     return this._prismaService.accommodation.findMany({
       orderBy: [{ id: 'asc' }],

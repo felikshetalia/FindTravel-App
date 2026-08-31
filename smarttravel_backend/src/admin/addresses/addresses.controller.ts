@@ -24,6 +24,11 @@ export class AdminAddressesController {
     return this._addressService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this._addressService.findOne(id);
+  }
+
   @Post()
   create(@Body() dto: CreateAddressDto) {
     return this._addressService.create(dto);

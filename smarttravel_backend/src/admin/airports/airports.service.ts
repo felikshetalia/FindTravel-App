@@ -25,6 +25,15 @@ export class AirportsService {
     });
   }
 
+  findOne(iataCode: string) {
+    return this._prismaService.airport.findUnique({
+      where: { iataCode },
+      include: {
+        location: true,
+      },
+    });
+  }
+
   async update(iata: string, newData: UpdateAirportDto) {
     return this._prismaService.airport.update({
       where: { iataCode: iata },

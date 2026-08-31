@@ -23,6 +23,11 @@ export class AdminAccommodationsController {
     return this._accommodationService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this._accommodationService.findOne(id);
+  }
+
   @Post()
   create(@Body() dto: CreateAccommodationDto) {
     return this._accommodationService.create(dto);

@@ -22,6 +22,12 @@ export class FlightsService {
     });
   }
 
+  findOne(id: string) {
+    return this._prismaService.flight.findUnique({
+      where: { id },
+    });
+  }
+
   findAll() {
     return this._prismaService.flight.findMany({
       orderBy: [{ departureTime: 'asc' }],

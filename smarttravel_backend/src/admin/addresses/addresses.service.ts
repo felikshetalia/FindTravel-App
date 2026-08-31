@@ -20,6 +20,15 @@ export class AddressesService {
     });
   }
 
+  findOne(id: string) {
+    return this._prismaService.address.findUnique({
+      where: { id },
+      include: {
+        location: true,
+      },
+    });
+  }
+
   findAll() {
     return this._prismaService.address.findMany({
       orderBy: [{ id: 'asc' }],
