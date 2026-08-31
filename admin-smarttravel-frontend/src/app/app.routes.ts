@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
+import { entityEditResolver } from './admin/database/entity-edit.resolver';
 
 export const routes: Routes = [
   {
@@ -59,6 +60,12 @@ export const routes: Routes = [
             path: 'offers/:id/edit',
             loadComponent: () =>
               import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+            data: {
+              entityType: 'offers',
+            },
+            resolve: {
+              entity: entityEditResolver,
+            },
           },
           {
             path: 'flights',
@@ -76,6 +83,12 @@ export const routes: Routes = [
             path: 'flights/:id/edit',
             loadComponent: () =>
               import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+            data: {
+              entityType: 'flights',
+            },
+            resolve: {
+              entity: entityEditResolver,
+            },
           },
           {
             path: 'accommodations',
@@ -93,6 +106,12 @@ export const routes: Routes = [
             path: 'accommodations/:id/edit',
             loadComponent: () =>
               import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+            data: {
+              entityType: 'accommodations',
+            },
+            resolve: {
+              entity: entityEditResolver,
+            },
           },
           {
             path: 'airports',
@@ -110,6 +129,12 @@ export const routes: Routes = [
             path: 'airports/:id/edit',
             loadComponent: () =>
               import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+            data: {
+              entityType: 'airports',
+            },
+            resolve: {
+              entity: entityEditResolver,
+            },
           },
           {
             path: 'locations',
@@ -127,6 +152,12 @@ export const routes: Routes = [
             path: 'locations/:id/edit',
             loadComponent: () =>
               import('./admin/database/entity-form/entity-form').then((m) => m.EntityFormComponent),
+            data: {
+              entityType: 'locations',
+            },
+            resolve: {
+              entity: entityEditResolver,
+            },
           },
         ],
       },
