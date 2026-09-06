@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   UseGuards,
@@ -26,13 +27,18 @@ export class AdminAirportsController {
     return this._airportService.create(dto);
   }
 
-  @Patch(':id')
-  edit(iata: string, @Body() newData: UpdateAirportDto) {
-    return this._airportService.update(iata, newData);
+  @Get(':iataCode')
+  findOne(@Param('iataCode') iataCode: string) {
+    return this._airportService.findOne(iataCode);
   }
 
-  @Delete(':id')
-  delete(iata: string) {
-    return this._airportService.remove(iata);
+  @Patch(':iataCode')
+  edit(@Param('iataCode') iataCode: string, @Body() newData: UpdateAirportDto) {
+    return this._airportService.update(iataCode, newData);
+  }
+
+  @Delete(':iataCode')
+  delete(@Param('iataCode') iataCode: string) {
+    return this._airportService.remove(iataCode);
   }
 }

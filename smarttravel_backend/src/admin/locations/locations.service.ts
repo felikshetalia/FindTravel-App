@@ -17,6 +17,12 @@ export class LocationsService {
     });
   }
 
+  findOne(id: string) {
+    return this._prismaService.location.findUnique({
+      where: { id },
+    });
+  }
+
   findAll() {
     return this._prismaService.location.findMany({
       orderBy: [{ country: 'asc' }, { city: 'asc' }],
