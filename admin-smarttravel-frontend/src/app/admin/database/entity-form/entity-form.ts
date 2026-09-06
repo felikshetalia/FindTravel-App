@@ -294,7 +294,7 @@ export class EntityFormComponent implements OnInit {
   get formattedTitle(): string {
     const action = this.isEditMode() ? 'Edit' : 'Add new';
     const singular = this.entityName().slice(0, -1); // Remove 's' for singular form
-    return `${action} {{ ${singular} }}`;
+    return `${action} ${singular}`;
   }
 
   getDropdownOptions(field: FieldConfig): SelectOption[] {
