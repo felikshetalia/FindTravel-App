@@ -24,6 +24,10 @@ export class ApiService {
     return this._httpClient.get<T>(`${this._apiUrl}/${entityType}/${id}`);
   }
 
+  updateEntity<T>(entityName: string, id: string, data: unknown) {
+    return this._httpClient.patch<T>(`${this._apiUrl}/${entityName}/${id}`, data);
+  }
+
   // Locations
   getLocations(): Observable<any[]> {
     return this._httpClient.get<any[]>(`${this._apiUrl}/locations`);
