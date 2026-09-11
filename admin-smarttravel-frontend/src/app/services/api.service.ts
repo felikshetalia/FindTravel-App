@@ -20,6 +20,12 @@ export class ApiService {
     return this._httpClient.delete(`${this._apiUrl}/${entityName}/${id}`);
   }
 
+  getEntities<T>(entityName: string) {
+    return entityName === 'offers'
+      ? this._httpClient.get<T[]>(`http://localhost:3000/api/offers`)
+      : this._httpClient.get<T[]>(`${this._apiUrl}/${entityName}`);
+  }
+
   getEntityById<T>(entityType: string, id: string) {
     return this._httpClient.get<T>(`${this._apiUrl}/${entityType}/${id}`);
   }
@@ -28,49 +34,10 @@ export class ApiService {
     return this._httpClient.patch<T>(`${this._apiUrl}/${entityName}/${id}`, data);
   }
 
-  // Locations
-  getLocations(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/locations`);
-  }
-
-  createLocation(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/locations`, data);
-  }
-
-  updateLocation(id: string, data: any): Observable<any> {
-    return this._httpClient.patch(`${this._apiUrl}/locations/${id}`, data);
-  }
-
-  deleteLocation(id: string): Observable<any> {
-    return this._httpClient.delete(`${this._apiUrl}/locations/${id}`);
-  }
-
-  // Addresses
-  getAddresses(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/addresses`);
-  }
-
-  createAddress(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/addresses`, data);
-  }
-
-  updateAddress(id: string, data: any): Observable<any> {
-    return this._httpClient.patch(`${this._apiUrl}/addresses/${id}`, data);
-  }
-
-  deleteAddress(id: string): Observable<any> {
-    return this._httpClient.delete(`${this._apiUrl}/addresses/${id}`);
-  }
-
-  // Airports
-  getAirports(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/airports`);
-  }
-
   getAirportsWithRelations(): Observable<any[]> {
     return forkJoin({
-      airports: this.getAirports(),
-      locations: this.getLocations(),
+      airports: this.getEntities<any>('airports'),
+      locations: this.getEntities<any>('locations'),
     }).pipe(
       map(({ airports, locations }) => {
         const locationMap = new Map(locations.map((loc: any) => [loc.id, loc]));
@@ -83,28 +50,11 @@ export class ApiService {
     );
   }
 
-  createAirport(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/airports`, data);
-  }
-
-  updateAirport(id: string, data: any): Observable<any> {
-    return this._httpClient.patch(`${this._apiUrl}/airports/${id}`, data);
-  }
-
-  deleteAirport(id: string): Observable<any> {
-    return this._httpClient.delete(`${this._apiUrl}/airports/${id}`);
-  }
-
-  // Accommodations
-  getAccommodations(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/accommodations`);
-  }
-
   getAccommodationsWithRelations(): Observable<any[]> {
     return forkJoin({
-      accommodations: this.getAccommodations(),
-      addresses: this.getAddresses(),
-      locations: this.getLocations(),
+      accommodations: this.getEntities<any>('accommodations'),
+      addresses: this.getEntities<any>('addresses'),
+      locations: this.getEntities<any>('locations'),
     }).pipe(
       map(({ accommodations, addresses, locations }) => {
         const addressMap = new Map(addresses.map((addr: any) => [addr.id, addr]));
@@ -140,46 +90,12 @@ export class ApiService {
     );
   }
 
-  createAccommodation(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/accommodations`, data);
-  }
-
-  updateAccommodation(id: string, data: any): Observable<any> {
-    return this._httpClient.patch(`${this._apiUrl}/accommodations/${id}`, data);
-  }
-
-  deleteAccommodation(id: string): Observable<any> {
-    return this._httpClient.delete(`${this._apiUrl}/accommodations/${id}`);
-  }
-
-  // Flights
-  getFlights(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`${this._apiUrl}/flights`);
-  }
-
-  createFlight(data: any): Observable<any> {
-    return this._httpClient.post(`${this._apiUrl}/flights`, data);
-  }
-
-  updateFlight(id: string, data: any): Observable<any> {
-    return this._httpClient.patch(`${this._apiUrl}/flights/${id}`, data);
-  }
-
-  deleteFlight(id: string): Observable<any> {
-    return this._httpClient.delete(`${this._apiUrl}/flights/${id}`);
-  }
-
-  // Offers
-  getOffers(): Observable<any[]> {
-    return this._httpClient.get<any[]>(`http://localhost:3000/api/offers`);
-  }
-
   getOffersWithRelations(): Observable<any[]> {
     return forkJoin({
-      offers: this.getOffers(),
-      accommodations: this.getAccommodations(),
-      flights: this.getFlights(),
-      locations: this.getLocations(),
+      offers: this.getEntities<any>('offers'),
+      accommodations: this.getEntities<any>('accommodations'),
+      flights: this.getEntities<any>('flights'),
+      locations: this.getEntities<any>('locations'),
     }).pipe(
       map(({ offers, accommodations, flights, locations }) => {
         const accommodationMap = new Map(accommodations.map((acc: any) => [acc.id, acc]));
@@ -202,15 +118,4 @@ export class ApiService {
     );
   }
 
-  createOffer(data: any): Observable<any> {
-    return this._httpClient.post(`http://localhost:3000/api/admin/offers`, data);
-  }
-
-  updateOffer(id: string, data: any): Observable<any> {
-    return this._httpClient.patch(`http://localhost:3000/api/admin/offers/${id}`, data);
-  }
-
-  deleteOffer(id: string): Observable<any> {
-    return this._httpClient.delete(`http://localhost:3000/api/admin/offers/${id}`);
-  }
 }

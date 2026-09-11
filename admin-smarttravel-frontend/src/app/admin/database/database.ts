@@ -25,15 +25,15 @@ export class DatabaseComponent implements OnInit {
   error = signal<string | null>(null);
 
   private tableConfig = [
-    { name: 'Offers', link: '/admin/database/offers', apiMethod: 'getOffers' },
+    { name: 'Offers', link: '/admin/database/offers', entityName: 'offers' },
     {
       name: 'Accommodation',
       link: '/admin/database/accommodations',
-      apiMethod: 'getAccommodations',
+      entityName: 'accommodations',
     },
-    { name: 'Locations', link: '/admin/database/locations', apiMethod: 'getLocations' },
-    { name: 'Airports', link: '/admin/database/airports', apiMethod: 'getAirports' },
-    { name: 'Flights', link: '/admin/database/flights', apiMethod: 'getFlights' },
+    { name: 'Locations', link: '/admin/database/locations', entityName: 'locations' },
+    { name: 'Airports', link: '/admin/database/airports', entityName: 'airports' },
+    { name: 'Flights', link: '/admin/database/flights', entityName: 'flights' },
   ];
 
   ngOnInit() {
@@ -45,9 +45,8 @@ export class DatabaseComponent implements OnInit {
     this.error.set(null);
 
     const requests$ = this.tableConfig.map((config) => {
-      const apiMethod = this._apiService[config.apiMethod as keyof ApiService] as any;
-      return apiMethod
-        .call(this._apiService)
+      return this._apiService
+        .getEntities<any>(config.entityName)
         .toPromise()
         .then(
           (data: any) => ({

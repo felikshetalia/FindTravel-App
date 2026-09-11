@@ -52,7 +52,7 @@ export class AccommodationsTableComponent implements OnInit {
 
   onDelete(accommodation: Accommodation) {
     if (confirm(`Are you sure you want to delete "${accommodation.name}"?`)) {
-      this._apiService.deleteAccommodation(accommodation.id).subscribe({
+      this._apiService.deleteEntity('accommodations', accommodation.id).subscribe({
         next: () => {
           this.accommodations.set(this.accommodations().filter((a) => a.id !== accommodation.id));
         },

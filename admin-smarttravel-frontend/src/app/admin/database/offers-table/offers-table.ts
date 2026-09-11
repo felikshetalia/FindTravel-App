@@ -63,7 +63,7 @@ export class OffersTableComponent implements OnInit {
 
   onDelete(offer: Offer) {
     if (confirm(`Are you sure you want to delete "${offer.location}"?`)) {
-      this._apiService.deleteOffer(offer.id).subscribe({
+      this._apiService.deleteEntity('offers', offer.id).subscribe({
         next: () => {
           this.offers.set(this.offers().filter((o) => o.id !== offer.id));
         },

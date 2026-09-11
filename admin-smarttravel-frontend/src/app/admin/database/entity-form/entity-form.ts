@@ -249,7 +249,7 @@ export class EntityFormComponent implements OnInit {
 
   private loadDropdownData() {
     // Load locations
-    this._apiService.getLocations().subscribe((locations) => {
+    this._apiService.getEntities<any>('locations').subscribe((locations) => {
       this.dropdownOptions['locations'] = locations.map((loc) => ({
         value: loc.id,
         label: `${loc.city}, ${loc.state || ''} ${loc.country}`.trim(),
@@ -257,7 +257,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     // Load airports
-    this._apiService.getAirports().subscribe((airports) => {
+    this._apiService.getEntities<any>('airports').subscribe((airports) => {
       this.dropdownOptions['airports'] = airports.map((airport) => ({
         value: airport.iataCode,
         label: `${airport.iataCode} - ${airport.name}`,
@@ -265,7 +265,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     // Load addresses
-    this._apiService.getAddresses().subscribe((addresses) => {
+    this._apiService.getEntities<any>('addresses').subscribe((addresses) => {
       this.dropdownOptions['addresses'] = addresses.map((addr) => ({
         value: addr.id,
         label: `${addr.street} ${addr.houseNumber}, ${addr.postalCode}`,
@@ -273,7 +273,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     // Load flights
-    this._apiService.getFlights().subscribe((flights) => {
+    this._apiService.getEntities<any>('flights').subscribe((flights) => {
       this.dropdownOptions['flights'] = flights.map((flight) => ({
         value: flight.id,
         label: `${flight.airlineName} ${flight.flightNumber} (${flight.fromIataCode} → ${flight.toIataCode})`,
@@ -281,7 +281,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     // Load accommodations
-    this._apiService.getAccommodations().subscribe((accommodations) => {
+    this._apiService.getEntities<any>('accommodations').subscribe((accommodations) => {
       this.dropdownOptions['accommodations'] = accommodations.map((acc) => ({
         value: acc.id,
         label: `${acc.name} - €${acc.costPerNight}/night (${acc.nights} nights)`,

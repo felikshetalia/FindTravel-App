@@ -39,7 +39,7 @@ export class FlightsTableComponent implements OnInit {
   loadFlights() {
     this.isLoading.set(true);
     this.error.set(null);
-    this._apiService.getFlights().subscribe({
+    this._apiService.getEntities<Flight>('flights').subscribe({
       next: (data) => {
         this.flights.set(data);
         this.isLoading.set(false);
@@ -62,7 +62,7 @@ export class FlightsTableComponent implements OnInit {
 
   onDelete(flight: Flight) {
     if (confirm(`Are you sure you want to delete flight "${flight.flightNumber}"?`)) {
-      this._apiService.deleteFlight(flight.id).subscribe({
+      this._apiService.deleteEntity('flights', flight.id).subscribe({
         next: () => {
           this.flights.set(this.flights().filter((f) => f.id !== flight.id));
         },
