@@ -3,13 +3,27 @@
 }
 
 .home-page {
-	min-height: 80vh;
+	position: relative;
+	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 	color: #222;
+	overflow: hidden;
+
+	background:
+    linear-gradient(
+      rgba(255, 255, 255, 0.85),
+      rgba(255, 255, 255, 0.99)
+    ),
+    url('/images/background-travel.jpg');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
 
 .home-header {
 	display: flex;
