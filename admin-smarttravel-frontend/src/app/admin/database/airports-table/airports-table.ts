@@ -51,7 +51,7 @@ export class AirportsTableComponent implements OnInit {
 
   onDelete(airport: Airport) {
     if (confirm(`Are you sure you want to delete airport "${airport.iataCode}"?`)) {
-      this._apiService.deleteAirport(airport.iataCode).subscribe({
+      this._apiService.deleteEntity('airports', airport.iataCode).subscribe({
         next: () => {
           this.airports.set(this.airports().filter((a) => a.iataCode !== airport.iataCode));
         },

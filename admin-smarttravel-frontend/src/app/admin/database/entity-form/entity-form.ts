@@ -22,6 +22,7 @@ export class EntityFormComponent implements OnInit {
   private _route = inject(ActivatedRoute);
   private _router = inject(Router);
   private _apiService = inject(ApiService);
+  private _resolvedEntity = signal<any>(null);
 
   form!: FormGroup;
   entityName = signal<string>('');
@@ -173,6 +174,7 @@ export class EntityFormComponent implements OnInit {
       const entity = this._route.snapshot.data['entity'];
 
       if (entity) {
+        this._resolvedEntity.set(entity);
         this.populateForm(entity);
       }
     }
@@ -247,7 +249,7 @@ export class EntityFormComponent implements OnInit {
 
   private loadDropdownData() {
     // Load locations
-    this._apiService.getLocations().subscribe((locations) => {
+    this._apiService.getEntities<any>('locations').subscribe((locations) => {
       this.dropdownOptions['locations'] = locations.map((loc) => ({
         value: loc.id,
         label: `${loc.city}, ${loc.state || ''} ${loc.country}`.trim(),
@@ -255,7 +257,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     // Load airports
-    this._apiService.getAirports().subscribe((airports) => {
+    this._apiService.getEntities<any>('airports').subscribe((airports) => {
       this.dropdownOptions['airports'] = airports.map((airport) => ({
         value: airport.iataCode,
         label: `${airport.iataCode} - ${airport.name}`,
@@ -263,7 +265,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     // Load addresses
-    this._apiService.getAddresses().subscribe((addresses) => {
+    this._apiService.getEntities<any>('addresses').subscribe((addresses) => {
       this.dropdownOptions['addresses'] = addresses.map((addr) => ({
         value: addr.id,
         label: `${addr.street} ${addr.houseNumber}, ${addr.postalCode}`,
@@ -271,7 +273,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     // Load flights
-    this._apiService.getFlights().subscribe((flights) => {
+    this._apiService.getEntities<any>('flights').subscribe((flights) => {
       this.dropdownOptions['flights'] = flights.map((flight) => ({
         value: flight.id,
         label: `${flight.airlineName} ${flight.flightNumber} (${flight.fromIataCode} → ${flight.toIataCode})`,
@@ -279,7 +281,7 @@ export class EntityFormComponent implements OnInit {
     });
 
     // Load accommodations
-    this._apiService.getAccommodations().subscribe((accommodations) => {
+    this._apiService.getEntities<any>('accommodations').subscribe((accommodations) => {
       this.dropdownOptions['accommodations'] = accommodations.map((acc) => ({
         value: acc.id,
         label: `${acc.name} - €${acc.costPerNight}/night (${acc.nights} nights)`,
@@ -342,6 +344,44 @@ export class EntityFormComponent implements OnInit {
           postalCode: formData.postalCode,
           locationId: formData.locationId,
         };
+        if (this.isEditMode() && this.itemId) {
+          const addressId =
+            this._resolvedEntity()?.address?.id ?? this._resolvedEntity()?.addressId;
+
+          if (!addressId) {
+            console.error('Accommodation address ID is missing');
+            return;
+          }
+
+          this._apiService.updateEntity('addresses', addressId, addressBody).subscribe({
+            next: () => {
+              const accommodationBody = {
+                name: formData.name,
+                costPerNight: Number(formData.costPerNight),
+                currency: formData.currency,
+                nights: Number(formData.nights),
+                addressId,
+              };
+
+              this._apiService
+                .updateEntity('accommodations', this.itemId!, accommodationBody)
+                .subscribe({
+                  next: () => {
+                    this._router.navigate(['/admin/database/accommodations']);
+                  },
+                  error: (err) => {
+                    console.error('Error updating accommodation:', err);
+                  },
+                });
+            },
+            error: (err) => {
+              console.error('Error updating address:', err);
+            },
+          });
+
+          return;
+        }
+
         this._apiService.createEntity<any>('addresses', addressBody).subscribe({
           next: (createdAddress) => {
             const accommodationBody = {
@@ -351,17 +391,21 @@ export class EntityFormComponent implements OnInit {
               nights: Number(formData.nights),
               addressId: createdAddress.id,
             };
-            this._apiService.createEntity(this.entityName(), accommodationBody).subscribe({
+
+            this._apiService.createEntity('accommodations', accommodationBody).subscribe({
               next: () => {
-                this._router.navigate([`/admin/database/${this.entityName()}`]);
+                this._router.navigate(['/admin/database/accommodations']);
               },
               error: (err) => {
                 console.error('Error creating accommodation:', err);
               },
             });
           },
-          error: (err) => console.error('Error creating address:', err),
+          error: (err) => {
+            console.error('Error creating address:', err);
+          },
         });
+
         return;
       }
 

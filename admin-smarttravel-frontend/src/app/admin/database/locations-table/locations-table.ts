@@ -28,7 +28,7 @@ export class LocationsTableComponent implements OnInit {
   loadLocations() {
     this.isLoading.set(true);
     this.error.set(null);
-    this._apiService.getLocations().subscribe({
+    this._apiService.getEntities<Location>('locations').subscribe({
       next: (data) => {
         this.locations.set(data);
         this.isLoading.set(false);
@@ -51,7 +51,7 @@ export class LocationsTableComponent implements OnInit {
 
   onDelete(location: Location) {
     if (confirm(`Are you sure you want to delete location "${location.id}"?`)) {
-      this._apiService.deleteLocation(location.id).subscribe({
+      this._apiService.deleteEntity('locations', location.id).subscribe({
         next: () => {
           this.locations.set(this.locations().filter((l) => l.id !== location.id));
         },
