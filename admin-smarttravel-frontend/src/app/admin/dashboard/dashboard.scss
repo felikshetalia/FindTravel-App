@@ -49,6 +49,17 @@
   flex: 1;
   padding: 40px;
   overflow-y: auto;
+
+  color: #222;
+  background:
+    linear-gradient(
+      rgba(255, 255, 255, 0.85),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url('/images/background2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 @media (max-width: 768px) {
