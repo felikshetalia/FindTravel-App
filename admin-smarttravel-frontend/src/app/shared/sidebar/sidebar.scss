@@ -1,6 +1,6 @@
 .sidebar {
   width: 180px;
-  background-color: #f0e8e0;
+  background-color: #f4f2ef;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -37,6 +37,7 @@
 .sidebar-nav {
   flex: 1;
   padding: 20px 0;
+  font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 }
 
 .nav-list {
